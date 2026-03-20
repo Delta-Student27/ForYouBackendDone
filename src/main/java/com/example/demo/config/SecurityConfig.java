@@ -10,7 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-<<<<<<< HEAD
+
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -20,9 +20,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.security.CustomUserDetailsService;
 import com.example.demo.security.JwtFilter;
-=======
+
 import org.springframework.http.HttpMethod;
->>>>>>> 741898d3e74e4280ae07b80cadfddd417e0b471b
+
 
 @Configuration
 public class SecurityConfig {
@@ -40,10 +40,10 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/api/auth/**").permitAll()
-<<<<<<< HEAD
+
                     .requestMatchers("/api/products/**").permitAll() // Allow viewing products
                     .requestMatchers("/api/cart/**").authenticated() // Cart must be authenticated
-=======
+
                     .requestMatchers(HttpMethod.GET, "/api/products/**")
                     //.hasAnyRole("USER", "ADMIN")
                     .permitAll()
@@ -59,7 +59,7 @@ public class SecurityConfig {
                     //.permitAll()
 
                      
->>>>>>> 741898d3e74e4280ae07b80cadfddd417e0b471b
+
                     .anyRequest().authenticated()
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

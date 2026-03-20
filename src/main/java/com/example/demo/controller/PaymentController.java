@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.model.Order;
 import com.example.demo.service.PaymentService;
+import java.util.Map;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,10 @@ public class PaymentController {
 
 
     @PostMapping("/create")
-    public String createPayment(@RequestParam Long orderId) {
+    // public String createPayment(@RequestParam Long orderId) {
+    //     return paymentService.createPayment(orderId);
+    // }
+    public Map<String, Object> createPayment(@RequestParam Long orderId) {
         return paymentService.createPayment(orderId);
     }
     @PostMapping("/verify")

@@ -1,11 +1,11 @@
-<<<<<<< HEAD
+
 package com.example.demo.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-=======
- package com.example.demo.model;
+
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,7 +15,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
->>>>>>> 741898d3e74e4280ae07b80cadfddd417e0b471b
 
 @Entity
 @Table(name = "products")
@@ -35,11 +34,11 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-<<<<<<< HEAD
+
     @OnDelete(action = OnDeleteAction.CASCADE) // This allows deletion even if linked to categories
-=======
+
     @JsonIgnoreProperties("products")
->>>>>>> 741898d3e74e4280ae07b80cadfddd417e0b471b
+
     private Category category;
 
     public Product() {}

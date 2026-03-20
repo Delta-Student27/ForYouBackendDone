@@ -24,15 +24,17 @@ public class JwtUtil {
     }
 
     // UPDATED: Now accepts role and adds it to claims
+    // public String generateToken(String email, String role) {
+    //     Map<String, Object> claims = new HashMap<>();
+    //     claims.put("role", role); // This is the magic line!
+
+
+
     public String generateToken(String email, String role) {
+
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", role); // This is the magic line!
-
-<<<<<<< HEAD
-=======
-
-    public String generateToken(String email, String role) {
->>>>>>> 741898d3e74e4280ae07b80cadfddd417e0b471b
+         claims.put("role", role);
+ 
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(email)

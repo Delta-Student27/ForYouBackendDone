@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.util.ArrayList;
 import com.example.demo.model.Cart;
 import com.example.demo.model.CartItem;
 import com.example.demo.model.Order;
@@ -69,39 +69,61 @@ public class OrderServiceImpl implements OrderService {
 
         double totalAmount = 0.0;
 
-        for (CartItem cartItem : cartItems) {
+        // for (CartItem cartItem : cartItems) {
 
-            OrderItem orderItem = new OrderItem();
-            orderItem.setOrder(savedOrder);
-            orderItem.setProduct(cartItem.getProduct());
-            orderItem.setQuantity(cartItem.getQuantity());
-            orderItem.setPrice(cartItem.getProduct().getPrice());
+        //     OrderItem orderItem = new OrderItem();
+        //     orderItem.setOrder(savedOrder);
+        //     orderItem.setProduct(cartItem.getProduct());
+        //     orderItem.setQuantity(cartItem.getQuantity());
+        //     orderItem.setPrice(cartItem.getProduct().getPrice());
 
-            totalAmount += cartItem.getQuantity() * cartItem.getProduct().getPrice();
+        //     totalAmount += cartItem.getQuantity() * cartItem.getProduct().getPrice();
 
-            orderItemRepository.save(orderItem);
-        }
+        //     orderItemRepository.save(orderItem);
+        // }
 
-        savedOrder.setTotalAmount(totalAmount);
-        orderRepository.save(savedOrder);
+        // savedOrder.setTotalAmount(totalAmount);
+        // orderRepository.save(savedOrder);
+
+List<OrderItem> orderItemsList = new ArrayList<>();
+for (CartItem cartItem : cartItems) {
+
+    OrderItem orderItem = new OrderItem();
+    orderItem.setOrder(savedOrder);
+    orderItem.setProduct(cartItem.getProduct());
+    orderItem.setQuantity(cartItem.getQuantity());
+    orderItem.setPrice(cartItem.getProduct().getPrice());
+
+    totalAmount += cartItem.getQuantity() * cartItem.getProduct().getPrice();
+
+    orderItemsList.add(orderItem);   // 🔥 ADD TO LIST
+}
+
+// 🔥 VERY IMPORTANT
+savedOrder.setOrderItems(orderItemsList);
+
+// save all items
+orderItemRepository.saveAll(orderItemsList);
+savedOrder.setTotalAmount(totalAmount);  // 🔥 ADD THIS
+orderRepository.save(savedOrder); 
 
         // ✅ Clear Cart After Order
         cartItemRepository.deleteAll(cartItems);
 
         // ✅ Send Order Confirmation Email
-        try {
-            emailService.sendEmail(
-                    user.getEmail(),
-                    "Order Confirmation 📦",
-                    "Hi " + user.getName() + ",\n\n"
-                            + "Your order #" + savedOrder.getId()
-                            + " has been placed successfully.\n\n"
-                            + "Total Amount: ₹" + totalAmount + "\n\n"
-                            + "Thank you for shopping with us!"
-            );
-        } catch (Exception e) {
-            System.out.println("Email failed but order placed.");
-        }
+        // try {
+        //     emailService.sendEmail(
+        //             user.getEmail(),
+        //             "Order Confirmation 📦",
+        //             "Hi " + user.getName() + ",\n\n"
+        //                     + "Your order #" + savedOrder.getId()
+        //                     + " has been placed successfully.\n\n"
+        //                     + "Total Amount: ₹" + totalAmount + "\n\n"
+        //                     + "Thank you for shopping with us!"
+        //     );
+        // } catch (Exception e) {
+        //     System.out.println("Email failed but order placed.");
+        // }
 
         return savedOrder;
     }
@@ -112,6 +134,12 @@ public class OrderServiceImpl implements OrderService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return orderRepository.findByUser(user);
+        //return orderRepository.findByUser(user);
+        List<Order> orders = orderRepository.findByUser(user);
+
+        // 🔥 FORCE Hibernate to load items
+        orders.forEach(order -> order.getOrderItems().size());
+
+        return orders;
     }
 }

@@ -2,11 +2,11 @@ package com.example.demo.service.Impl;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
-<<<<<<< HEAD
+
 import org.springframework.transaction.annotation.Transactional; // Import this
-=======
+
 import com.example.demo.model.Category;
->>>>>>> 741898d3e74e4280ae07b80cadfddd417e0b471b
+
 import com.example.demo.model.Product;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.ProductRepository;
@@ -28,8 +28,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product addProduct(Product product) {
-<<<<<<< HEAD
-=======
 
 
         Long categoryId = product.getCategory().getId();
@@ -40,8 +38,7 @@ public class ProductServiceImpl implements ProductService {
 
         product.setCategory(category);
 
-       
->>>>>>> 741898d3e74e4280ae07b80cadfddd417e0b471b
+
         return productRepository.save(product);
     }
 
