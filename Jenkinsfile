@@ -1,38 +1,77 @@
-// pipeline {
-//     agent any
+pipeline {
+    agent any
 
-//     environment {
-//         SERVICE_ID = "srv-xxxxxxxxxxxx"   // Replace with your Render Service ID
-//     }
+    environment {
+        DOCKER_IMAGE = "tanushri1510/ecomm-app"
+        DOCKER_TAG = "latest"
+    }
 
-//     stages {
+    tools {
+        maven 'Maven'   // configure in Jenkins Global Tool Configuration
+    }
 
-//         stage('Clone Repository') {
-//             steps {
-//                 git branch: 'main',
-//                     url: 'https://github.com/Delta-Student27/ForYou.git'
-//             }
-//         }
+    stages {
 
-//         stage('Deploy to Render') {
-//             steps {
-//                 withCredentials([string(credentialsId: 'RENDER_API_KEY', variable: 'RENDER_KEY')]) {
-//                     bat """
-//                     curl -X POST https://api.render.com/v1/services/%SERVICE_ID%/deploys ^
-//                     -H "Authorization: Bearer %RENDER_KEY%" ^
-//                     -H "Content-Type: application/json"
-//                     """
-//                 }
-//             }
-//         }
-//     }
+        stage('Clone Code') {
+            steps {
+                git branch: 'tanuhsri', url: 'https://github.com/Delta-Student27/ForYouBackendDone.git'
+            }
+        }
 
-//     post {
-//         success {
-//             echo 'Deployment triggered successfully 🚀'
-//         }
-//         failure {
-//             echo 'Deployment failed ❌'
-//         }
-//     }
-// }
+        stage('Build Application') {
+            steps {
+                sh 'mvn clean package -DskipTests'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $DOCKER_IMAGE:$DOCKER_TAG .'
+            }
+        }
+
+        stage('Login to DockerHub') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                sh 'docker push $DOCKER_IMAGE:$DOCKER_TAG'
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh '''
+                kubectl apply -f k8s/
+                '''
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                sh '''
+                kubectl get pods
+                kubectl get svc
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ CI/CD Pipeline executed successfully!'
+        }
+        failure {
+            echo '❌ Pipeline failed. Check logs.'
+        }
+    }
+}
