@@ -1,21 +1,21 @@
-# 🛍️ ForYou - E-commerce Platform
+# ForYou - E-commerce Platform
 
 ForYou is a full-stack E-commerce web application designed to provide a seamless online shopping experience. It allows users to browse products, add items to cart, and place orders efficiently.
 
 ---
 
-## 🚀 Features
+# Features
 
-- 🛒 Browse products with detailed descriptions
-- ➕ Add to cart & manage cart items
-- 💳 Order placement functionality
-- 🔍 Search and filter products
-- 📦 Responsive and user-friendly UI
-- 🔄 RESTful APIs for smooth frontend-backend communication
+-  Browse products with detailed descriptions
+-  Add to cart & manage cart items
+- Order placement functionality
+- Search and filter products
+- Responsive and user-friendly UI
+- RESTful APIs for smooth frontend-backend communication
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 **Frontend:**
 - React.js
@@ -37,9 +37,9 @@ ForYou is a full-stack E-commerce web application designed to provide a seamless
 
 ---
 
-## ⚙️ Installation & Setup
+## Installation & Setup
 
-### 1️⃣ Clone the repository
+### 1️ Clone the repository
 ```bash
 git clone https://github.com/your-username/foryou-ecommerce.git
 cd foryou-ecommerce
